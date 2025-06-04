@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas em JavaScript</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="models/No.js"></script>
+    <script src="models/Linkedlist.js"></script>
+    <script src="controllers/ListaController.js"></script>
+    <script src="models/Tarefa.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid">
+      <!-- Header -->
+      <header class="bg-primary text-white py-4 mb-4 shadow-sm">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col text-center">
+              <h1 class="display-5 mb-0 fw-bold">
+                <i class="fas fa-tasks me-3"></i>ToDo List Manager
+              </h1>
+              <p class="lead mb-0 opacity-75">Gestor de Tarefas</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="container">
+        <!-- Alert for removal messages -->
+        <div id="mensagem-remocao" class="alert alert-warning alert-dismissible fade show shadow-sm" style="display: none;" role="alert">
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row g-4">
+          <!-- Form Section -->
+          <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-white border-0 py-3">
+                <h4 class="card-title mb-0 text-primary">
+                  <i class="fas fa-plus-circle me-2"></i>Nova Tarefa
+                </h4>
+              </div>
+              <div class="card-body p-4">
+                <form>
+                  <div class="mb-3">
+                    <label for="txtnovaTarefa" class="form-label fw-semibold">
+                      <i class="fas fa-edit me-1"></i>Descrição da Tarefa
+                    </label>
+                    <input type="text" class="form-control form-control-lg" id="txtnovaTarefa" placeholder="Digite a descrição da tarefa...">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="txtnovaPrioridade" class="form-label fw-semibold">
+                      <i class="fas fa-exclamation-triangle me-1"></i>Prioridade
+                    </label>
+                    <input type="number" class="form-control form-control-lg" id="txtnovaPrioridade" placeholder="1 = Alta, 2 = Média, 3 = Baixa" min="1" max="3">
+                  </div>
+                  
+                  <div class="mb-4">
+                    <label for="txtIndice" class="form-label fw-semibold">
+                      <i class="fas fa-list-ol me-1"></i>Índice (opcional)
+                    </label>
+                    <input type="number" class="form-control form-control-lg" id="txtIndice" placeholder="Posição na lista..." min="0">
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <button type="button" class="btn btn-success btn-lg w-100" onclick="adicionarElementoInicio()">
+                        <i class="fas fa-angle-double-up me-1"></i>Início
+                      </button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-success btn-lg w-100" onclick="adicionarElementoFinal()">
+                        <i class="fas fa-angle-double-down me-1"></i>Final
+                      </button>
+                    </div>
+                    <div class="col-12">
+                      <button type="button" class="btn btn-info btn-lg w-100" onclick="adicionarIndice()">
+                        <i class="fas fa-crosshairs me-1"></i>Adicionar no Índice
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Remove Buttons -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <button type="button" class="btn btn-outline-danger w-100" onclick="removerElementoInicio()">
+                        <i class="fas fa-minus-circle me-1"></i>Remover Início
+                      </button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-outline-danger w-100" onclick="removerElementoFinal()">
+                        <i class="fas fa-minus-circle me-1"></i>Remover Final
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Storage Buttons -->
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <button type="button" class="btn btn-outline-secondary w-100" onclick="saveLinkedListToLocalStorage()">
+                        <i class="fas fa-save me-1"></i>Salvar
+                      </button>
+                    </div>
+                    <div class="col-6">
+                      <button type="button" class="btn btn-outline-secondary w-100" onclick="loadLinkedListFromLocalStorage()">
+                        <i class="fas fa-upload me-1"></i>Carregar
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task List Section -->
+          <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-white border-0 py-3">
+                <h4 class="card-title mb-0 text-primary">
+                  <i class="fas fa-list me-2"></i>Lista de Tarefas
+                </h4>
+              </div>
+              <div class="card-body p-4">
+                <div id="lblmostraTarefas" class="text-center text-muted py-5">
+                  <i class="fas fa-clipboard-list fa-3x mb-3 opacity-50"></i>
+                  <h5>Lista vazia!</h5>
+                  <p class="mb-0">Adicione uma nova tarefa para começar</p>
+                </div>
+                <ul id="list_listadeTarefas" ></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+          <p class="mb-0">
+            <i class="fas fa-heart text-danger me-1"></i>
+            Desenvolvido por José Carlos Souza do IFSULDEMINAS.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
