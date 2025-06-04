@@ -49,9 +49,9 @@ class LinkedList{
 
     removeLast(){
         const dadoRemovido = this.#tail.dado;
-         this.#tail = this.#tail.proximo;
+         this.#tail = this.#tail.anterior;
         if(this.#tail !== null)
-            this.#tail.anterior = null;
+            this.#tail.proximo = null;
         else
             this.head = null;
         this.#qtd--;
