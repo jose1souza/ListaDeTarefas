@@ -11,31 +11,42 @@ function limpaInputs() {
 function leiaDadosTarefa() {
     const descricao = document.getElementById("txtnovaTarefa").value.trim();
     const prioridade = document.getElementById("txtnovaPrioridade").value.trim();
+    const indice = document.getElementById("txtIndice").value.trim();
     if (descricao === "" || prioridade === "") {
         alert("Preencha os campos de descrição e prioridade!");
         return null;
     }
-    return new Tarefa(descricao, prioridade, obterDataAtual(), obterHoraAtual());
+    return new Tarefa(descricao, obterDataAtual(), obterHoraAtual());
 }
 //--------------------------------------------------------------------------------------------
  function adicionarElementoInicio() {
      const novaTarefa = leiaDadosTarefa();
+     if(novaTarefa!=null){
     minhaLista.addFirst(novaTarefa);
     console.log(minhaLista.toString());
     limpaInputs();
     atualizarLista();
+    }
  }
  //------------------------------------------------------------------------------------------------------
   function adicionarElementoFinal() {
     const novaTarefa = leiaDadosTarefa();
+    if(novaTarefa!=null){
     minhaLista.addLast(novaTarefa);
     console.log(minhaLista.toString());
     limpaInputs();
     atualizarLista();
+    }
   }
   //--------------------------------------------------------------------------------------------
   function adicionarIndice() {
-    //implemente
+    const novaTarefa = leiaDadosTarefa();
+    if(novaTarefa!=null){
+    minhaLista.addLast(novaTarefa);
+    console.log(minhaLista.toString());
+    limpaInputs();
+    atualizarLista();
+    }
   }
 //--------------------------------------------------------------------------------------------
  // Função para remover o primeiro elemento da lista
@@ -48,14 +59,19 @@ function leiaDadosTarefa() {
     else{
       alert("Lista de Tarefas Vazia");
     }
-   
  }
  //--------------------------------------------------------------------------------------------
  // Função para remover o ultimo elemento da lista
  function removerElementoFinal() {
-   // implemente
+  if(!minhaLista.isEmpty()){
+    const tarefaRealizada = minhaLista.removeFirst();
+    mostrarMensagemRemocao(tarefaRealizada);
+    atualizarLista();
+  }
+  else{
+    alert("Lista de Tarefas Vazia");
+  }
 }
-
 //--------------------------------------------------------------------------------------------
 function mostrarMensagemRemocao(tarefaRealizada) {
     const mensagem = document.getElementById("mensagem-remocao");
