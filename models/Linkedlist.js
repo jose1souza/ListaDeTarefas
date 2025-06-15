@@ -29,7 +29,6 @@ class LinkedList{
         else{
            novoNo.anterior = this.#tail;
            this.#tail.proximo = novoNo;
-
         }
         this.#tail = novoNo;
         this.#qtd++;
@@ -39,14 +38,15 @@ class LinkedList{
     addAtIndex(posicao,novoDado){
         if(posicao<=0)
             return this.addFirst(novoDado);
-        if(posicao>=this.qtd)
+        if(posicao>=this.#qtd)
             return this.addLast(novoDado);
+        const novoNo = new No(novoDado);
         let aux = this.#head;
         let indice = 0;
             while(indice < posicao-1){
                 aux = aux.proximo;
                 indice++;
-            }
+        }
         novoNo.anterior = aux;
         novoNo.proximo = aux.proximo;
         aux.proximo = novoNo;
@@ -68,11 +68,11 @@ class LinkedList{
 
     removeLast(){
         const dadoRemovido = this.#tail.dado;
-         this.#tail = this.#tail.anterior;
-        if(this.#tail === null)
+        this.#tail = this.#tail.anterior;
+        if(this.#tail!=null)
             this.#tail.proximo = null;
         else
-            this.head = null;
+          this.#head = null;
         this.#qtd--;
         return dadoRemovido;
     }
