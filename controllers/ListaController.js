@@ -4,7 +4,7 @@ const minhaLista = new LinkedList();
 function limpaInputs() {
     document.getElementById("txtnovaTarefa").value = "";
     document.getElementById("txtnovaPrioridade").value = "";
-    document.getElementById("txtIndice").value = "";
+    // document.getElementById("txtIndice").value = "";
     document.getElementById("txtnovaTarefa").focus();
 }
 //--------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ function leiaDadosTarefa() {
         alert("Preencha os campos de descrição e prioridade!");
         return null;
     }
-    return new Tarefa(descricao, prioridade,obterDataAtual(), obterHoraAtual());
+    return new Tarefa(descricao, prioridade ,obterDataAtual(), obterHoraAtual());
 }
 //--------------------------------------------------------------------------------------------
  function adicionarElementoInicio() {
@@ -52,7 +52,7 @@ function leiaDadosTarefa() {
   function inserePorPrioridade(){
     const novaTarefa = leiaDadosTarefa();
     if(novaTarefa!=null){
-      const novaPrioridade = document.getElementById("txtnovaPrioridade").value.trim();
+      const novaPrioridade = parseInt(document.getElementById("txtnovaPrioridade").value.trim());
         let indice = 0;
         for(const tarefa of minhaLista){
           const prioridadeAtual = tarefa.prioridade;
@@ -100,13 +100,18 @@ function mostraTarefaMaisAntiga(){
   }
     mostrarMensagemUltimaTarefa(dataMaisAntiga);
     atualizarLista();
-  }
+  }else{
     alert("Lista de Tarefas Vazia!");
+  }
 }
 //--------------------------------------------------------------------------------------------
 function mostrarMensagemRemocao(tarefaRealizada) {
     const mensagem = document.getElementById("mensagem-remocao");
-    mensagem.innerHTML ="Tarefa realizada: "+ tarefaRealizada.descricao;
+    const dataConcluida = obterDataAtual();
+    const horaConcluida = obterHoraAtual();
+    const diferencaDias = calcularDiferencaDias(tarefaRealizada.data, dataConcluida);
+    const diferencaHoras = calcularDiferencaHoras(tarefaRealizada.hora,horaConcluida);
+    mensagem.innerHTML = "Tarefa realizada: "+ tarefaRealizada.descricao + " Em " + diferencaDias + " dias" + " e "+ diferencaHoras + " horas e/ou minutos";
     mensagem.style.display = "block";
   }
 //--------------------------------------------------------------------------------------------
