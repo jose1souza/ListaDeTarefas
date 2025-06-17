@@ -14,3 +14,15 @@ li {
 li:hover {
     background-color: #f7e1e1;
 }
+
+.selected-task {
+    background-color: transparent;
+    font-weight: bold; 
+    color: green; 
+}
+
+.selected-task::before {
+    content: "✔ "; 
+    color: green; 
+    font-weight: bold;
+}

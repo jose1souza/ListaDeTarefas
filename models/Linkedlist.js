@@ -55,6 +55,21 @@ class LinkedList{
         return true;
     }
 
+    removeAtIndex(index){
+        let atual = this.#head;
+        let posicao = 0;
+            while(posicao < index){
+                atual = atual.proximo;
+                posicao++;
+        }
+        const anterior = atual.anterior;
+        const proximo = atual.proximo;
+        anterior.proximo = proximo;
+        proximo.anterior = anterior;
+        this.#qtd--;
+        return atual.dado;
+    }
+
     removeFirst(){
         const dadoRemovido = this.#head.dado;
         this.#head = this.#head.proximo;

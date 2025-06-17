@@ -92,6 +92,25 @@ function leiaDadosTarefa() {
   }
 }
 //--------------------------------------------------------------------------------------------
+function removerTarefaPorIndice(index) {
+  if (!minhaLista.isEmpty()) {
+    let tarefaRemovida = null;
+    if(index === 0){
+      tarefaRemovida  = minhaLista.removeFirst();
+    }
+    else if(index === minhaLista.length - 1){
+      tarefaRemovida = minhaLista.removeLast();
+    } 
+    else{
+      tarefaRemovida = minhaLista.removeAtIndex(index);
+    }
+    mostrarMensagemRemocao(tarefaRemovida);
+    atualizarLista();
+  } else {
+    alert("Lista de Tarefas Vazia");
+  }
+}
+//--------------------------------------------------------------------------------------------
 function mostraTarefaMaisAntiga(){
   if(!minhaLista.isEmpty()){
     let dataMaisAntiga = minhaLista.getFirst();
@@ -128,12 +147,26 @@ function mostrarMensagemUltimaTarefa(tarefaRealizada) {
    const lblTarefas = 
           document.getElementById("lblmostraTarefas");
    listaTarefas.innerHTML = "";    // limpar antes de mostrar
+  let indice = 0;
    if(!minhaLista.isEmpty()){
       lblTarefas.innerHTML = "Lista de Tarefas";
       for(const tarefa of minhaLista){
           const novaLinha = document.createElement("li");
-          novaLinha.innerHTML = tarefa.toString();
+          novaLinha.classList.add("lis-group-item","d-flex","align-items-center");
+          const caixaDeMarcacao = document.createElement("input");
+          caixaDeMarcacao.type = "caixaDeMarcacao";
+          caixaDeMarcacao.classList.add("form-check-input", "me-2");
+          caixaDeMarcacao.dataset.index = indice;
+          novaLinha.addEventListener("click", function() {
+                this.classList.toggle("selected-task");
+            });
+          const span = document.createElement("span");
+          span.textContent = tarefa.toString();
+          novaLinha.appendChild(caixaDeMarcacao);
+          novaLinha.appendChild(span);
+          // novaLinha.innerHTML = tarefa.toString();
           listaTarefas.appendChild(novaLinha);
+          indice++;
       }
    }
    else{
